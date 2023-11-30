@@ -36,39 +36,36 @@ export function ModalComp({
   const [lastName, setLastName] = useState(editedData.lastName || '')
   const [phone, setPhone] = useState(editedData.phone || '')
 
-  function phoneAlreadyExists() {
-    if (editedData.phone !== phone && data?.length) {
-      return data.find((item) => item.phone === phone)
-    }
-
-    return false
-  }
-
   async function handleSave() {
     if (!firstName || !lastName || !phone) {
       return
     }
 
     try {
-      const response = await api.post('/users', { firstName, lastName, phone })
+      let newDataArray = [...data]
 
-      if (phoneAlreadyExists()) {
-        return alert('The phone number already exists.')
+      if (editedData.id !== null) {
+        await api.put(`/users/${editedData.id}`, { firstName, lastName, phone })
+        newDataArray[editedData.index!] = {
+          ...editedData,
+          firstName,
+          lastName,
+          phone,
+        }
+      } else {
+        console.log('Adding new user')
+        const response = await api.post('/users', {
+          firstName,
+          lastName,
+          phone,
+        })
+        newDataArray = [...newDataArray, response.data]
       }
-
-      if (Object.keys(editedData).length) {
-        data[editedData.index!] = { firstName, lastName, phone }
-      }
-
-      const newDataArray = !Object.keys(editedData).length
-        ? [...(data || []), response.data]
-        : [...(data || [])]
 
       setData(newDataArray)
-
       onClose()
     } catch (error) {
-      console.error('Cannot register this contact.', error)
+      console.error('Error during API request:', error)
     }
   }
 

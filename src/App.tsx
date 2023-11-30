@@ -1,4 +1,4 @@
-import { DeleteIcon, PhoneIcon, SearchIcon } from '@chakra-ui/icons'
+import { DeleteIcon, EditIcon, PhoneIcon, SearchIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -21,6 +21,7 @@ export interface Data {
   lastName: string
   phone: string
   index?: number
+  id?: number
 }
 
 export function App() {
@@ -100,14 +101,8 @@ export function App() {
 
         <Box overflow="auto" height="100%">
           <List spacing={3}>
-            {filteredData.map(({ firstName, lastName, phone }, index) => (
-              <ListItem
-                key={index}
-                cursor="pointer"
-                p="16px"
-                m="2px"
-                backgroundColor="white"
-              >
+            {filteredData.map(({ firstName, lastName, phone, id }, index) => (
+              <ListItem key={index} p="16px" m="2px" backgroundColor="white">
                 <Flex w="100%" align="center" justify="space-between">
                   <Box w="100%">
                     <Heading as="h3" size="md">
@@ -124,6 +119,22 @@ export function App() {
                       </Text>
                     </Flex>
                   </Box>
+
+                  <Button backgroundColor="orange" color="white" mr="16px">
+                    <EditIcon
+                      fontSize={20}
+                      onClick={() => [
+                        setEditedData({
+                          firstName,
+                          lastName,
+                          phone,
+                          index,
+                          id,
+                        }),
+                        onOpen(),
+                      ]}
+                    />
+                  </Button>
 
                   <Button backgroundColor="#cb444a" color="white">
                     <DeleteIcon
