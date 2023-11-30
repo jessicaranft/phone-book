@@ -1,0 +1,22 @@
+{
+  "users": [
+    {
+      "firstName": "Eric",
+      "lastName": "Elliot",
+      "phone": "222-555-6575",
+      "id": 1
+    },
+    {
+      "firstName": "Steve",
+      "lastName": "Jobs",
+      "phone": "220-454-6754",
+      "id": 2
+    },
+    {
+      "firstName": "Fred",
+      "lastName": "Allen",
+      "phone": "210-657-9886",
+      "id": 3
+    }
+  ]
+}
