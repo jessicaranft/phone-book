@@ -21,7 +21,7 @@ export interface Data {
   lastName: string
   phone: string
   index?: number
-  id?: number
+  id?: number | undefined
 }
 
 export function App() {
@@ -38,10 +38,13 @@ export function App() {
     lastName.toLowerCase().includes(searchValue.toLowerCase()),
   )
 
-  function handleRemove(phone: string) {
-    const newArray = data.filter((item) => item.phone !== phone)
-
-    setData(newArray)
+  async function handleRemove(id: number) {
+    try {
+      await api.delete(`/users/${id}`)
+      setData((prevData) => prevData.filter((item) => item.id !== id))
+    } catch (error) {
+      console.error('Error during API request:', error)
+    }
   }
 
   async function fetchUsers() {
@@ -139,7 +142,7 @@ export function App() {
                   <Button backgroundColor="#cb444a" color="white">
                     <DeleteIcon
                       fontSize={20}
-                      onClick={() => handleRemove(phone)}
+                      onClick={() => id !== undefined && handleRemove(id)}
                     />
                   </Button>
                 </Flex>

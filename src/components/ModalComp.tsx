@@ -42,27 +42,20 @@ export function ModalComp({
     }
 
     try {
-      let newDataArray = [...data]
+      const newContact = { firstName, lastName, phone }
 
-      if (editedData.id !== null) {
-        await api.put(`/users/${editedData.id}`, { firstName, lastName, phone })
-        newDataArray[editedData.index!] = {
-          ...editedData,
-          firstName,
-          lastName,
-          phone,
-        }
+      if (editedData.id !== undefined && editedData.id !== null) {
+        console.log('Updating user:', editedData.id)
+        await api.put(`/users/${editedData.id}`, newContact)
+        const newDataArray = [...data]
+        newDataArray[editedData.index!] = { ...editedData, ...newContact }
+        setData(newDataArray)
       } else {
         console.log('Adding new user')
-        const response = await api.post('/users', {
-          firstName,
-          lastName,
-          phone,
-        })
-        newDataArray = [...newDataArray, response.data]
+        const response = await api.post('/users', newContact)
+        setData((prevData: Data[]) => [...prevData, response.data] as Data[])
       }
 
-      setData(newDataArray)
       onClose()
     } catch (error) {
       console.error('Error during API request:', error)
