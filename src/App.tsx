@@ -34,13 +34,16 @@ export function App() {
   })
   const [searchValue, setSearchValue] = useState('')
 
-  const filteredData = data.filter(({ lastName }) =>
-    lastName.toLowerCase().includes(searchValue.toLowerCase()),
-  )
+  const filteredData = Array.isArray(data)
+    ? data.filter(({ lastName }) =>
+        lastName.toLowerCase().includes(searchValue.toLowerCase()),
+      )
+    : []
 
   async function handleRemove(id: number) {
     try {
       await api.delete(`/users/${id}`)
+      console.log('Contact removed')
       setData((prevData) => prevData.filter((item) => item.id !== id))
     } catch (error) {
       console.error('Error during API request:', error)

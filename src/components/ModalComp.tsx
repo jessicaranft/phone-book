@@ -20,7 +20,7 @@ interface ModalCompProps {
   data: Data[]
   editedData: Data
   isOpen: boolean
-  setData: (data: Data[]) => void
+  setData: React.Dispatch<React.SetStateAction<Data[]>>
   onClose: () => void
   setEditedData: (data: Data) => void
 }
@@ -45,15 +45,15 @@ export function ModalComp({
       const newContact = { firstName, lastName, phone }
 
       if (editedData.id !== undefined && editedData.id !== null) {
-        console.log('Updating user:', editedData.id)
         await api.put(`/users/${editedData.id}`, newContact)
+
         const newDataArray = [...data]
         newDataArray[editedData.index!] = { ...editedData, ...newContact }
+
         setData(newDataArray)
       } else {
-        console.log('Adding new user')
         const response = await api.post('/users', newContact)
-        setData((prevData: Data[]) => [...prevData, response.data] as Data[])
+        setData((prevData) => [...prevData, response.data])
       }
 
       onClose()

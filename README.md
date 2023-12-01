@@ -4,7 +4,7 @@ This is a basic CRUD Phone Book App with the following features:
 
 - Add new contact
 - Update current contact data
-- Delete user
+- Delete contact
 
 ### How to run the application:
 
